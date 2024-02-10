@@ -1,0 +1,76 @@
+[gd_scene load_steps=13 format=3 uid="uid://s2hslp4p1tof"]
+
+[ext_resource type="Texture2D" uid="uid://4t3v6pa8bbee" path="res://assets/images/textures/kloofendal_48d_partly_cloudy_puresky_2k.hdr" id="1_8w0mm"]
+[ext_resource type="Script" path="res://sceens/player.gd" id="3_nliv3"]
+[ext_resource type="Texture2D" uid="uid://crt2xqqaaqp4h" path="res://assets/images/textures/texture_05.png" id="4_u4p4v"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ynrxr"]
+uv1_triplanar = true
+
+[sub_resource type="BoxMesh" id="BoxMesh_hr5q0"]
+material = SubResource("StandardMaterial3D_ynrxr")
+size = Vector3(20, 1, 20)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_kfyps"]
+size = Vector3(20, 1, 20)
+
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_4xbl5"]
+panorama = ExtResource("1_8w0mm")
+
+[sub_resource type="Sky" id="Sky_oxepj"]
+sky_material = SubResource("PanoramaSkyMaterial_4xbl5")
+
+[sub_resource type="Environment" id="Environment_36lrr"]
+background_mode = 2
+sky = SubResource("Sky_oxepj")
+tonemap_mode = 2
+glow_enabled = true
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ypovi"]
+albedo_texture = ExtResource("4_u4p4v")
+uv1_triplanar = true
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_74re7"]
+material = SubResource("StandardMaterial3D_ypovi")
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_fscp8"]
+
+[node name="world1" type="Node3D"]
+
+[node name="floor" type="StaticBody3D" parent="."]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="floor"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.280551, 0)
+mesh = SubResource("BoxMesh_hr5q0")
+skeleton = NodePath("../..")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="floor"]
+shape = SubResource("BoxShape3D_kfyps")
+
+[node name="env" type="Node3D" parent="."]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="env"]
+environment = SubResource("Environment_36lrr")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="env"]
+transform = Transform3D(0.265466, -0.914456, 0.305447, 0.305082, 0.38021, 0.873136, -0.914578, -0.138601, 0.379917, 1.08014, 4.77046, 2.80666)
+
+[node name="player" type="CharacterBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.168672, 0)
+script = ExtResource("3_nliv3")
+metadata/_edit_group_ = true
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="player"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+mesh = SubResource("CapsuleMesh_74re7")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="player"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+shape = SubResource("CapsuleShape3D_fscp8")
+
+[node name="head" type="Node3D" parent="player"]
+transform = Transform3D(0.813558, 0, 0.581484, 0, 1, 0, -0.581484, 0, 0.813558, 0, 2.44136, 0)
+
+[node name="Camera3D" type="Camera3D" parent="player/head"]
+transform = Transform3D(0.997818, 0.0660107, -0.00155973, -0.0660107, 0.996703, -0.0471807, -0.00155982, 0.0471807, 0.998885, 0.197648, -0.23161, 0.0619324)
+fov = 102.133
